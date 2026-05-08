@@ -90,16 +90,18 @@ body{
 .wheel-hub{
   position:absolute;top:50%;left:50%;
   transform:translate(-50%,-50%);
-  width:62px;height:62px;
+  width:72px;height:72px;
   border-radius:50%;
   background:linear-gradient(145deg,#FFD700,#B8860B);
   box-shadow:0 4px 16px rgba(0,0,0,.5),inset 0 2px 4px rgba(255,255,255,.4);
   display:flex;align-items:center;justify-content:center;
   z-index:3;
   font-family:'Poppins',sans-serif;
-  font-weight:900;font-size:11px;
+  font-weight:900;font-size:15px;
   color:#3E2200;text-align:center;
-  line-height:1.1;text-transform:uppercase;
+  line-height:1.05;text-transform:uppercase;
+  letter-spacing:.3px;
+  text-shadow:0 1px 1px rgba(255,255,255,.25),0 2px 6px rgba(62,34,0,.25);
 }
 
 .pointer{
@@ -368,6 +370,18 @@ function buildWheel() {
     var ty = CY + tr * Math.sin(midA);
     var deg = (midA * 180 / Math.PI) + 90;
     var lines = segments[i].label.split('\n');
+    var cashLabel = /(PKR|CASH)/i.test(segments[i].label);
+    if (cashLabel) {
+      var noteW = 38, noteH = 24;
+      var ir1 = R * 0.48;
+      var ix1 = CX + ir1 * Math.cos(midA) - 18;
+      var iy1 = CY + ir1 * Math.sin(midA) - 6;
+      var ir2 = R * 0.74;
+      var ix2 = CX + ir2 * Math.cos(midA) - 16;
+      var iy2 = CY + ir2 * Math.sin(midA) - 10;
+      html += '<image href="'+BUNDLE_IMG+'" x="'+ix1+'" y="'+iy1+'" width="'+noteW+'" height="'+noteH+'" preserveAspectRatio="xMidYMid meet" opacity="0.95" transform="rotate('+(deg-18)+','+(ix1+noteW/2)+','+(iy1+noteH/2)+')"/>';
+      html += '<image href="'+BUNDLE_IMG+'" x="'+ix2+'" y="'+iy2+'" width="'+noteW+'" height="'+noteH+'" preserveAspectRatio="xMidYMid meet" opacity="0.9" transform="rotate('+(deg+14)+','+(ix2+noteW/2)+','+(iy2+noteH/2)+')"/>';
+    }
     html += '<text x="'+tx+'" y="'+ty+'" text-anchor="middle" transform="rotate('+deg+','+tx+','+ty+')" fill="#fff" font-family="Poppins,sans-serif" font-weight="700" font-size="11">';
     for (var li = 0; li < lines.length; li++) {
       var fs = lines[li].match(/\d/) ? '13' : '10';
